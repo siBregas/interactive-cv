@@ -16,7 +16,7 @@ import SectionTitle from './SectionTitle.vue';
             <!-- Garis penghubung vertikal di tengah titik -->
             <div class="absolute left-2 top-4 bottom-0 w-0.5 bg-blue-400"></div>
 
-            <div v-for="(edu, index) in educationHistory" :key="edu.id"
+            <div v-for="(edu) in educationHistory" :key="edu.id"
                  class="pl-6 pb-6 relative">
               <!-- Titik timeline -->
               <div class="absolute w-4 h-4 bg-blue-500 rounded-full left-0 top-2 z-10"></div>
