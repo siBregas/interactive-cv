@@ -1,38 +1,6 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { educationHistory, skills } from '../assets/data.js';
 import SectionTitle from './SectionTitle.vue';
-
-// Education data
-const educationHistory = ref([
-  { id: 1, period: '2023 - Sekarang', institution: 'Universitas AMIKOM ', major: 'S1 - Teknik Informatika' },
-  { id: 2, period: '2019 - 2022', institution: 'SMK Negeri 2 Klaten', major: 'Elektornika' }
-]);
-
-// Skills data
-const skills = ref([
-  { name: 'Vue.js', level: 'Mahir' },
-  { name: 'JavaScript', level: 'Mahir' },
-  { name: 'Tailwind CSS', level: 'Mahir' },
-  { name: 'Node.js', level: 'Menengah' },
-  { name: 'Express.js', level: 'Menengah' },
-  { name: 'PostgreSQL', level: 'Menengah' },
-  { name: 'Git & GitHub', level: 'Mahir' },
-  { name: 'HTML5 & CSS3', level: 'Mahir' }
-]);
-
-onMounted(async () => {
-  try {
-    const [educationResponse, skillsResponse] = await Promise.all([
-      axios.get('http://localhost:3000/api/education'),
-      axios.get('http://localhost:3000/api/skills')
-    ]);
-    educationHistory.value = educationResponse.data;
-    skills.value = skillsResponse.data;
-  } catch (error) {
-    console.error(error);
-  }
-});
 </script>
 
 <template>
@@ -40,9 +8,9 @@ onMounted(async () => {
     <div class="container mx-auto px-6">
       <SectionTitle title="Riwayat Pendidikan & Keahlian" />
 
-      <div class="grid lg:grid-cols-2 gap-16">
+      <div class="grid lg:grid-cols-3 gap-16">
         <!-- Education Section (Left) -->
-        <div class="bg-gray-700 rounded-lg shadow-lg p-8 border border-gray-600">
+        <div class="lg:col-span-1 bg-gray-700 rounded-lg shadow-lg p-8 border border-gray-600">
           <h3 class="text-2xl font-bold text-white mb-8 text-center">Riwayat Pendidikan</h3>
           <div class="space-y-6 relative">
             <!-- Garis penghubung vertikal di tengah titik -->
@@ -60,11 +28,16 @@ onMounted(async () => {
         </div>
 
         <!-- Skills Section (Right) -->
-        <div class="bg-gray-700 rounded-lg shadow-lg p-8 border border-gray-600">
+        <div class="lg:col-span-2 bg-gray-700 rounded-lg shadow-lg p-8 border border-gray-600">
           <h3 class="text-2xl font-bold text-white mb-8 text-center">Keahlian & Teknologi</h3>
           <div class="grid grid-cols-2 gap-4">
             <div v-for="skill in skills" :key="skill.name"
-                 class="bg-gray-600 p-4 rounded-lg text-center transform hover:-translate-y-1 transition-transform duration-300 border border-gray-500">
+                 :class="{
+                   'bg-green-500': skill.level === 'Mahir',
+                   'bg-yellow-500': skill.level === 'Menengah',
+                   'bg-red-500': skill.level !== 'Mahir' && skill.level !== 'Menengah'
+                 }"
+                 class="p-4 rounded-lg text-center transform hover:-translate-y-1 transition-transform duration-300 border border-gray-500">
               <h4 class="text-lg font-bold text-white">{{ skill.name }}</h4>
               <p class="text-gray-300 mt-1 text-sm">{{ skill.level }}</p>
             </div>

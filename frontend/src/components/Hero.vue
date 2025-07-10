@@ -8,7 +8,7 @@ col md:flex-row items-center bg-gray-900">
 <h1 class="text-5xl font-bold text-white mb-4 animate-slide-
 in-left" style="animation-delay: 200ms;">
 
-Halo, Saya <span class="text-blue-400">Nama Anda</span>
+Halo, Saya <span class="text-blue-400">Dimas Bregas Khalis S</span>
 </h1>
 <p class="text-xl text-gray-300 mb-8 animate-slide-in-left"
 style="animation-delay: 400ms;">
