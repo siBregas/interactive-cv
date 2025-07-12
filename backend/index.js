@@ -1,10 +1,13 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { educationHistory, skills, projects } = require('./data');
+const { testConnection, getEducation, getSkills, getProjects } = require('./database');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Test database connection on startup
+testConnection();
 
 // CORS configuration
 app.use(cors({
@@ -17,21 +20,43 @@ app.use(cors({
 app.use(express.json());
 
 // API Routes
-app.get('/api/education', (req, res) => {
-  res.json(educationHistory);
+app.get('/api/education', async (req, res) => {
+  try {
+    const education = await getEducation();
+    res.json(education);
+  } catch (error) {
+    console.error('Error fetching education:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
-app.get('/api/skills', (req, res) => {
-  res.json(skills);
+app.get('/api/skills', async (req, res) => {
+  try {
+    const skills = await getSkills();
+    res.json(skills);
+  } catch (error) {
+    console.error('Error fetching skills:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
-app.get('/api/projects', (req, res) => {
-  res.json(projects);
+app.get('/api/projects', async (req, res) => {
+  try {
+    const projects = await getProjects();
+    res.json(projects);
+  } catch (error) {
+    console.error('Error fetching projects:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ message: 'Backend is running!', timestamp: new Date().toISOString() });
+  res.json({ 
+    message: 'Backend is running!', 
+    timestamp: new Date().toISOString(),
+    database: 'Connected to Neon PostgreSQL'
+  });
 });
 
 // Root endpoint
