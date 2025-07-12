@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -55,6 +56,12 @@ app.use(cors({
 
 app.use(express.json());
 
+// Serve static files from frontend build in production
+if (process.env.NODE_ENV === 'production') {
+  const frontendDistPath = path.join(__dirname, '../frontend/dist');
+  app.use(express.static(frontendDistPath));
+}
+
 // API Routes
 app.get('/api/education', async (req, res) => {
   try {
@@ -107,14 +114,31 @@ app.get('/', (req, res) => {
   });
 });
 
-// Catch all handler  
-app.get('*', (req, res) => {
-  res.json({ 
-    message: 'Interactive CV Backend API',
-    requested: req.path,
-    available_endpoints: ['/api/health', '/api/education', '/api/skills', '/api/projects']
+// Serve Vue.js app for all non-API routes in production
+if (process.env.NODE_ENV === 'production') {
+  app.get('*', (req, res) => {
+    // If it's an API route that doesn't exist, send JSON error
+    if (req.path.startsWith('/api/')) {
+      res.status(404).json({ 
+        message: 'API endpoint not found',
+        requested: req.path,
+        available_endpoints: ['/api/health', '/api/education', '/api/skills', '/api/projects']
+      });
+    } else {
+      // For all other routes, serve the Vue.js app
+      res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+    }
   });
-});
+} else {
+  // Development catch all
+  app.get('*', (req, res) => {
+    res.json({ 
+      message: 'Interactive CV Backend API - Development Mode',
+      requested: req.path,
+      available_endpoints: ['/api/health', '/api/education', '/api/skills', '/api/projects']
+    });
+  });
+}
 
 // Only listen in development
 if (process.env.NODE_ENV !== 'production') {
