@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { testConnection, getEducation, getSkills, getProjects } = require('./database');
 
 const app = express();
@@ -12,12 +13,17 @@ testConnection();
 // CORS configuration
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://your-vercel-app.vercel.app'] 
+    ? ['https://interactive-cv-bay.vercel.app'] 
     : ['http://localhost:5173', 'http://localhost:3000'],
   credentials: true
 }));
 
 app.use(express.json());
+
+// Serve static files from frontend dist
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../frontend/dist')));
+}
 
 // API Routes
 app.get('/api/education', async (req, res) => {
@@ -59,9 +65,22 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Root endpoint
+// Root endpoint - serve frontend in production
 app.get('/', (req, res) => {
-  res.json({ message: 'Interactive CV Backend API' });
+  if (process.env.NODE_ENV === 'production') {
+    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+  } else {
+    res.json({ message: 'Interactive CV Backend API - Development Mode' });
+  }
+});
+
+// Catch all handler for frontend routes
+app.get('*', (req, res) => {
+  if (process.env.NODE_ENV === 'production') {
+    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+  } else {
+    res.json({ message: 'Interactive CV Backend API' });
+  }
 });
 
 app.listen(PORT, () => {

@@ -6,7 +6,8 @@
     "build": "cd frontend && npm install && npm run build",
     "start": "cd backend && npm start",
     "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
-    "install-deps": "cd frontend && npm install && cd ../backend && npm install"
+    "install-deps": "cd frontend && npm install && cd ../backend && npm install",
+    "vercel-build": "cd frontend && npm install && npm run build"
   },
   "keywords": ["vue", "express", "portfolio", "cv"],
   "author": "siBregas",
