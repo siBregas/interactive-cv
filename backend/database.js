@@ -33,6 +33,7 @@ const testConnection = async () => {
 const getEducation = async () => {
   try {
     const result = await pool.query('SELECT * FROM education ORDER BY id');
+    console.log('📚 Education fetched from database:', result.rows.length, 'records');
     return result.rows;
   } catch (error) {
     console.error('Error fetching education from DB, using fallback:', error.message);
@@ -44,6 +45,7 @@ const getEducation = async () => {
 const getSkills = async () => {
   try {
     const result = await pool.query('SELECT * FROM skills ORDER BY id');
+    console.log('🛠️ Skills fetched from database:', result.rows.length, 'records');
     return result.rows;
   } catch (error) {
     console.error('Error fetching skills from DB, using fallback:', error.message);
@@ -55,6 +57,7 @@ const getSkills = async () => {
 const getProjects = async () => {
   try {
     const result = await pool.query('SELECT * FROM projects ORDER BY id');
+    console.log('🚀 Projects fetched from database:', result.rows.length, 'records');
     return result.rows;
   } catch (error) {
     console.error('Error fetching projects from DB, using fallback:', error.message);
