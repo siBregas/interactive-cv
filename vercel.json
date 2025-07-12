@@ -2,6 +2,13 @@
   "version": 2,
   "builds": [
     {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    },
+    {
       "src": "backend/index.js",
       "use": "@vercel/node"
     }
@@ -12,8 +19,12 @@
       "dest": "/backend/index.js"
     },
     {
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|svg|ico)$)",
+      "dest": "/frontend/dist/$1"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/backend/index.js"
+      "dest": "/frontend/dist/index.html"
     }
   ]
 }
