@@ -19,8 +19,7 @@
       "dest": "/backend/index.js"
     },
     {
-      "src": "/(.*\\.(js|css|png|jpg|jpeg|svg|ico)$)",
-      "dest": "/frontend/dist/$1"
+      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
