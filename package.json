@@ -1,0 +1,17 @@
+{
+  "name": "interactive-cv",
+  "version": "1.0.0",
+  "description": "Interactive CV with Vue.js frontend and Express.js backend",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "start": "cd backend && npm start",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
+    "install-deps": "cd frontend && npm install && cd ../backend && npm install"
+  },
+  "keywords": ["vue", "express", "portfolio", "cv"],
+  "author": "siBregas",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}

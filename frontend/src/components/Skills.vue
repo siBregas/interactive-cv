@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import SectionTitle from './SectionTitle.vue';
+import { API_ENDPOINTS } from '../config/api.js';
 
 const skills = ref([
   { name: 'Vue.js', level: 'Mahir' },
@@ -16,7 +17,7 @@ const skills = ref([
 
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:3000/api/skills');
+    const response = await axios.get(API_ENDPOINTS.skills);
     skills.value = response.data;
   } catch (error) {
     console.error('Error fetching skills data:', error);

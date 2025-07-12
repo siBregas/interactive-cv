@@ -2,6 +2,7 @@
 import SectionTitle from './SectionTitle.vue';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../config/api.js';
 
 // Make educationHistory reactive with ref
 const educationHistory = ref([
@@ -9,7 +10,7 @@ const educationHistory = ref([
 
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:3000/api/education');
+    const response = await axios.get(API_ENDPOINTS.education);
     educationHistory.value = response.data;
   } catch (error) {
     console.error('Error fetching education data:', error);

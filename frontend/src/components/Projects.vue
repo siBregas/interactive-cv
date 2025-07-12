@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import SectionTitle from './SectionTitle.vue';
+import { API_ENDPOINTS } from '../config/api.js';
 
 const currentSlideIndex = ref(0);
 const crudImages = [
@@ -33,7 +34,7 @@ onMounted(async () => {
   startAutoSlide();
 
   try {
-    const response = await axios.get('http://localhost:3000/api/projects');
+    const response = await axios.get(API_ENDPOINTS.projects);
     projects.value = response.data;
   } catch (error) {
     console.error(error);
