@@ -1,29 +1,6 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
 import SectionTitle from './SectionTitle.vue';
-import { API_ENDPOINTS } from '../config/api.js';
-
-const skills = ref([
-  { name: 'Vue.js', level: 'Mahir' },
-  { name: 'JavaScript', level: 'Mahir' },
-  { name: 'Tailwind CSS', level: 'Mahir' },
-  { name: 'Node.js', level: 'Menengah' },
-  { name: 'Express.js', level: 'Menengah' },
-  { name: 'PostgreSQL', level: 'Menengah' },
-  { name: 'Git & GitHub', level: 'Mahir' },
-  { name: 'HTML5 & CSS3', level: 'Mahir' }
-]);
-
-onMounted(async () => {
-  try {
-    const response = await axios.get(API_ENDPOINTS.skills);
-    skills.value = response.data;
-  } catch (error) {
-    console.error('Error fetching skills data:', error);
-    // Keep using local data if API fails
-  }
-});
+import { skills } from '../data/staticData.js';
 </script>
 
 <template>

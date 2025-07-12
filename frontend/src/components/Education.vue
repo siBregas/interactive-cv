@@ -1,22 +1,6 @@
 <script setup>
 import SectionTitle from './SectionTitle.vue';
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-import { API_ENDPOINTS } from '../config/api.js';
-
-// Make educationHistory reactive with ref
-const educationHistory = ref([
-]);
-
-onMounted(async () => {
-  try {
-    const response = await axios.get(API_ENDPOINTS.education);
-    educationHistory.value = response.data;
-  } catch (error) {
-    console.error('Error fetching education data:', error);
-    // Keep using local data if API fails
-  }
-});
+import { educationHistory } from '../data/staticData.js';
 </script>
 
 <template>
@@ -25,8 +9,8 @@ onMounted(async () => {
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div v-for="(education, index) in educationHistory" :key="index" class="p-4 border rounded-md shadow-md">
         <h3 class="text-lg font-semibold">{{ education.institution }}</h3>
-        <p class="text-sm text-gray-600">{{ education.degree }}</p>
-        <p class="text-sm text-gray-500">{{ education.year }}</p>
+        <p class="text-sm text-gray-600">{{ education.major }}</p>
+        <p class="text-sm text-gray-500">{{ education.period }}</p>
       </div>
     </div>
   </section>

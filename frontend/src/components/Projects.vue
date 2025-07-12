@@ -1,44 +1,24 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
 import SectionTitle from './SectionTitle.vue';
-import { API_ENDPOINTS } from '../config/api.js';
+import { projects } from '../data/staticData.js';
 
 const currentSlideIndex = ref(0);
-const crudImages = [
-  '/image/CRUD1.png',
-  '/image/CRUD2.png',
-  '/image/CRUD3.png'
-];
 
-const projects = [
-{ title: 'Website CRUD',
-  images: crudImages,
-  image: crudImages[0],
-  description: 'Web iseng CRUD barang dengan admin panel untuk mengelola data barang. dan user dapat melihat data barang yang tersedia lalu melakukan proses transaksi yang akan mengurangi stock barang.',
-  tech: ['Vue.js', 'Express.js', 'javascript', 'Prisma'],
-  link: 'https://github.com/siBregas/TokoBarang_vue_express',
-  hasSlider: true
-},
-{ title: 'project kelas online', image: 'https://via.placeholder.com/500x300?text=Proyek+2', description: 'web tembat belajar coding online', tech: ['Laravel', 'php'], link: 'https://github.com/KingEery/FP_PemrogWeb' }
-];
 // Auto-slide functionality
 const startAutoSlide = () => {
   setInterval(() => {
-    currentSlideIndex.value = (currentSlideIndex.value + 1) % crudImages.length;
+    // Get the first project (CRUD project) images
+    const crudProject = projects.find(p => p.has_slider);
+    if (crudProject && crudProject.images) {
+      currentSlideIndex.value = (currentSlideIndex.value + 1) % crudProject.images.length;
+    }
   }, 3000); // Change image every 3 seconds
 };
 
-onMounted(async () => {
+onMounted(() => {
   // Start auto-slide for CRUD images
   startAutoSlide();
-
-  try {
-    const response = await axios.get(API_ENDPOINTS.projects);
-    projects.value = response.data;
-  } catch (error) {
-    console.error(error);
-  }
 });
 
 </script>
@@ -50,7 +30,7 @@ onMounted(async () => {
           class="bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700">
 
           <!-- Image Slider for CRUD Project -->
-          <div v-if="project.hasSlider" class="relative w-full h-56 overflow-hidden bg-gray-700">
+          <div v-if="project.has_slider" class="relative w-full h-56 overflow-hidden bg-gray-700">
             <div class="flex transition-transform duration-500 ease-in-out h-full"
                  :style="{ transform: `translateX(-${currentSlideIndex * 100}%)` }">
               <img v-for="(img, index) in project.images" :key="index"
