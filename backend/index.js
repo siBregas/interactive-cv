@@ -2,13 +2,28 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { testConnection, getEducation, getSkills, getProjects } = require('./database');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Test database connection on startup
-testConnection();
+// Import database functions with error handling
+let dbFunctions = {};
+try {
+  dbFunctions = require('./database');
+  // Test database connection on startup
+  if (dbFunctions.testConnection) {
+    dbFunctions.testConnection();
+  }
+} catch (error) {
+  console.error('Database module not found, using fallback data:', error.message);
+  // Fallback to static data
+  const { educationHistory, skills, projects } = require('./data');
+  dbFunctions = {
+    getEducation: async () => educationHistory,
+    getSkills: async () => skills,
+    getProjects: async () => projects
+  };
+}
 
 // CORS configuration
 app.use(cors({
@@ -20,15 +35,10 @@ app.use(cors({
 
 app.use(express.json());
 
-// Serve static files from frontend dist
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../frontend/dist')));
-}
-
 // API Routes
 app.get('/api/education', async (req, res) => {
   try {
-    const education = await getEducation();
+    const education = await dbFunctions.getEducation();
     res.json(education);
   } catch (error) {
     console.error('Error fetching education:', error);
@@ -38,7 +48,7 @@ app.get('/api/education', async (req, res) => {
 
 app.get('/api/skills', async (req, res) => {
   try {
-    const skills = await getSkills();
+    const skills = await dbFunctions.getSkills();
     res.json(skills);
   } catch (error) {
     console.error('Error fetching skills:', error);
@@ -48,7 +58,7 @@ app.get('/api/skills', async (req, res) => {
 
 app.get('/api/projects', async (req, res) => {
   try {
-    const projects = await getProjects();
+    const projects = await dbFunctions.getProjects();
     res.json(projects);
   } catch (error) {
     console.error('Error fetching projects:', error);
@@ -65,24 +75,33 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Root endpoint - serve frontend in production
+// Root endpoint
 app.get('/', (req, res) => {
-  if (process.env.NODE_ENV === 'production') {
-    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
-  } else {
-    res.json({ message: 'Interactive CV Backend API - Development Mode' });
-  }
+  res.json({ 
+    message: 'Interactive CV Backend API',
+    status: 'running',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      health: '/api/health',
+      education: '/api/education',
+      skills: '/api/skills',
+      projects: '/api/projects'
+    }
+  });
 });
 
-// Catch all handler for frontend routes
+// Catch all handler  
 app.get('*', (req, res) => {
-  if (process.env.NODE_ENV === 'production') {
-    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
-  } else {
-    res.json({ message: 'Interactive CV Backend API' });
-  }
+  res.json({ 
+    message: 'Interactive CV Backend API',
+    requested: req.path,
+    available_endpoints: ['/api/health', '/api/education', '/api/skills', '/api/projects']
+  });
 });
 
 app.listen(PORT, () => {
   console.log(`Server backend berjalan di http://localhost:${PORT}`);
 });
+
+// Export untuk Vercel
+module.exports = app;
