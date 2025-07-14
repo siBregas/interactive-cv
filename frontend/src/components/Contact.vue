@@ -36,12 +36,6 @@ atau bertanya.</p>
     <img src="/image/STEAM.png" alt="Steam" class="w-20 h-20 object-contain">
     <span class="sr-only">Steam</span>
   </a>
-
-  <!-- WhatsApp -->
-  <a href="https://wa.me/085876110727" target="_blank" class="hover:scale-110 transition-transform duration-300 group flex items-center justify-center mx-2 p-2 rounded-lg ">
-    <img src="/image/WA.png" alt="WhatsApp" class="w-16 h-16 object-contain">
-    <span class="sr-only">WhatsApp</span>
-  </a>
 </div>
 
 <div class="flex justify-center space-x-6 mb-8">

@@ -30,11 +30,12 @@ export const projects = [
   },
   {
     id: 2,
-    title: 'project kelas online',
-    image: 'https://via.placeholder.com/500x300?text=Proyek+2',
+    title: 'Project kelas online',
+    images: ['/image/kelas_online2.jpg','/image/kelas_online1.jpg'],
+    image: '/image/kelas_online1.jpg',
     description: 'web tembat belajar coding online',
     tech: ['Laravel', 'php'],
     link: 'https://github.com/KingEery/FP_PemrogWeb',
-    has_slider: false
+    has_slider: true
   }
 ];
